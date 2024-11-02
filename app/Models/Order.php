@@ -13,15 +13,16 @@ class Order extends Model
         'order_number',
         'total_amount',
         'status',
-        'checkout_date'
+        'checkout_date',
     ];
 
     protected function casts(): array
     {
         return [
-            'checkout_date' => 'datetime'
+            'checkout_date' => 'datetime',
         ];
     }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

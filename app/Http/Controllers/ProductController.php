@@ -27,7 +27,7 @@ class ProductController extends Controller
 
         if ($request->has('categories')) {
             $categories = explode(',', $request->categories);
-            if (!in_array('all', array_map('strtolower', $categories))) {
+            if (! in_array('all', array_map('strtolower', $categories))) {
                 $query->whereIn('category_id', $categories);
             }
         }
@@ -59,6 +59,7 @@ class ProductController extends Controller
         }
 
         $products = $query->get();
+
         return ApiResponse::success($products);
     }
 
@@ -71,12 +72,14 @@ class ProductController extends Controller
         }
 
         $products = $query->get();
+
         return ApiResponse::success($products);
     }
 
     public function show($id): JsonResponse
     {
         $product = Product::with(['category', 'images'])->findOrFail($id);
+
         return ApiResponse::success($product);
     }
 
@@ -88,7 +91,7 @@ class ProductController extends Controller
             'description' => 'required|string',
             'stock' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'images.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         try {
@@ -96,11 +99,11 @@ class ProductController extends Controller
 
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
-                    $fileName = time() . '_' . $image->getClientOriginalName();
+                    $fileName = time().'_'.$image->getClientOriginalName();
                     $image->storeAs('public/products', $fileName);
 
                     $product->images()->create([
-                        'image_path' => 'products/' . $fileName
+                        'image_path' => 'products/'.$fileName,
                     ]);
                 }
             }
@@ -121,7 +124,7 @@ class ProductController extends Controller
             'description' => 'string',
             'stock' => 'integer|min:0',
             'price' => 'numeric|min:0',
-            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048'
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         try {
@@ -129,16 +132,16 @@ class ProductController extends Controller
 
             if ($request->hasFile('images')) {
                 foreach ($product->images as $image) {
-                    Storage::delete('public/' . $image->image_path);
+                    Storage::delete('public/'.$image->image_path);
                 }
                 $product->images()->delete();
 
                 foreach ($request->file('images') as $image) {
-                    $fileName = time() . '_' . $image->getClientOriginalName();
+                    $fileName = time().'_'.$image->getClientOriginalName();
                     $image->storeAs('public/products', $fileName);
 
                     $product->images()->create([
-                        'image_path' => 'products/' . $fileName
+                        'image_path' => 'products/'.$fileName,
                     ]);
                 }
             }
@@ -155,7 +158,7 @@ class ProductController extends Controller
 
         try {
             foreach ($product->images as $image) {
-                Storage::delete('public/' . $image->image_path);
+                Storage::delete('public/'.$image->image_path);
             }
 
             $product->delete();

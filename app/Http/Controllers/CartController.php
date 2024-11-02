@@ -15,6 +15,7 @@ class CartController extends Controller
         $carts = Cart::with(['product.images', 'product.category'])
             ->where('user_id', auth()->id())
             ->get();
+
         return ApiResponse::success($carts);
     }
 
@@ -22,7 +23,7 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1',
         ]);
 
         $product = Product::select('id', 'stock')->findOrFail($request->product_id);
@@ -34,7 +35,7 @@ class CartController extends Controller
         $cart = Cart::updateOrCreate(
             [
                 'user_id' => auth()->id(),
-                'product_id' => $request->product_id
+                'product_id' => $request->product_id,
             ],
             ['quantity' => $request->quantity]
         );
@@ -45,7 +46,7 @@ class CartController extends Controller
     public function update(Request $request, $id): JsonResponse
     {
         $request->validate([
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1',
         ]);
         $cart = Cart::where('user_id', auth()->id())->findOrFail($id);
 
@@ -67,6 +68,4 @@ class CartController extends Controller
 
         return ApiResponse::success(null, 'Product removed from cart');
     }
-
-
 }

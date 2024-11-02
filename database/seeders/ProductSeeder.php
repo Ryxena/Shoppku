@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Product;
 use App\Models\ProductImage;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -30,7 +29,7 @@ class ProductSeeder extends Seeder
         foreach ($product1Images as $image) {
             ProductImage::create([
                 'product_id' => $product1->id,
-                'image_path' => $image['image_path']
+                'image_path' => $image['image_path'],
             ]);
         }
 
@@ -49,7 +48,7 @@ class ProductSeeder extends Seeder
         foreach ($product2Images as $image) {
             ProductImage::create([
                 'product_id' => $product2->id,
-                'image_path' => $image['image_path']
+                'image_path' => $image['image_path'],
             ]);
         }
 
@@ -63,7 +62,7 @@ class ProductSeeder extends Seeder
 
         ProductImage::create([
             'product_id' => $product3->id,
-            'image_path' => 'public/products/book-1.jpeg'
+            'image_path' => 'public/products/book-1.jpeg',
         ]);
     }
 }

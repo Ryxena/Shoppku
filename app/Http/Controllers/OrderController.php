@@ -16,6 +16,7 @@ class OrderController extends Controller
             ->where('user_id', auth()->id())
             ->latest()
             ->get();
+
         return ApiResponse::success($orders);
     }
 
@@ -24,6 +25,7 @@ class OrderController extends Controller
         $order = Order::with(['orderDetails.product'])
             ->where('user_id', auth()->id())
             ->findOrFail($id);
+
         return ApiResponse::success($order);
     }
 
@@ -50,17 +52,17 @@ class OrderController extends Controller
 
             $order = Order::create([
                 'user_id' => $userId,
-                'order_number' => 'ORD-' . Str::random(10),
+                'order_number' => 'ORD-'.Str::random(10),
                 'total_amount' => $totalAmount,
                 'status' => 'pending',
-                'checkout_date' => now()
+                'checkout_date' => now(),
             ]);
 
             foreach ($carts as $cart) {
                 $order->orderDetails()->create([
                     'product_id' => $cart->product_id,
                     'quantity' => $cart->quantity,
-                    'price' => $cart->product->price
+                    'price' => $cart->product->price,
                 ]);
 
                 $cart->product->decrement('stock', $cart->quantity);
@@ -74,12 +76,10 @@ class OrderController extends Controller
         }
     }
 
-
-
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,processing,success,cancelled'
+            'status' => 'required|in:pending,processing,success,cancelled',
         ]);
 
         $order = Order::where('user_id', auth()->id())->findOrFail($id);

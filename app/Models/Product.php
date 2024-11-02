@@ -13,15 +13,17 @@ class Product extends Model
         'name',
         'description',
         'stock',
-        'price'
+        'price',
     ];
+
     protected function casts(): array
     {
         return [
             'price' => 'decimal:2',
-            'rating' => 'decimal:2'
+            'rating' => 'decimal:2',
         ];
     }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

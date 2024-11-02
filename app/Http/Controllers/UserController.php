@@ -29,7 +29,7 @@ class UserController extends Controller
         $profileImage = null;
         if ($request->hasFile('profile')) {
             $image = $request->file('profile');
-            $fileName = time() . '_' . $image->getClientOriginalName();
+            $fileName = time().'_'.$image->getClientOriginalName();
             $profileImage = $image->storeAs('public/profile', $fileName);
         }
         $user = new User([
@@ -44,6 +44,7 @@ class UserController extends Controller
             return ApiResponse::error('Error When Register A user');
         }
     }
+
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
@@ -87,7 +88,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return ApiResponse::error( "Validation error", $validator->errors());
+            return ApiResponse::error('Validation error', $validator->errors());
         }
 
         try {
@@ -97,7 +98,7 @@ class UserController extends Controller
                 }
 
                 $image = $request->file('profile');
-                $photoName = time() . '.' . $image->getClientOriginalExtension();
+                $photoName = time().'.'.$image->getClientOriginalExtension();
                 $profileImage = $image->storeAs('public/profile', $photoName);
                 $user->profile = $profileImage;
             }
@@ -112,10 +113,9 @@ class UserController extends Controller
 
             $user->save();
 
-            return ApiResponse::success($user, "Profil berhasil diperbarui");
+            return ApiResponse::success($user, 'Profil berhasil diperbarui');
         } catch (Exception $e) {
-            return ApiResponse::error("Terjadi kesalahan saat memperbarui profil", null);
+            return ApiResponse::error('Terjadi kesalahan saat memperbarui profil', null);
         }
     }
-
 }
