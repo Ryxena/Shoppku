@@ -13,8 +13,8 @@ Route::prefix('v1')->group(function () {
     Route::controller(UserController::class)->prefix('auth')->group(function () {
         Route::post('register', 'register')->name('register');
         Route::post('login', 'login')->name('login');
-        Route::get('logout', 'logout')->name('logout');
-        Route::post('edit', 'edit')->name('edit');
+        Route::get('logout', 'logout')->name('logout')->middleware('auth:sanctum');
+        Route::post('edit', 'edit')->name('edit')->middleware('auth:sanctum');
     });
 
     Route::middleware('auth:sanctum')->group(function () {
