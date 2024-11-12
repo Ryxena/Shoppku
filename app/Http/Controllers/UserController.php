@@ -8,12 +8,13 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:3',
@@ -39,7 +40,7 @@ class UserController extends Controller
             'password' => bcrypt($request->get('password')),
         ]);
         if ($user->save()) {
-            return ApiResponse::success($user, 'User registered successfully', 200);
+            return ApiResponse::success($user, 'User registered successfully');
         } else {
             return ApiResponse::error('Error When Register A user');
         }
@@ -71,13 +72,13 @@ class UserController extends Controller
                 'message' => 'login successfully',
                 'data' => $user,
                 'token' => $token,
-            ], 200);
+            ]);
         } else {
             return ApiResponse::error('Unauthorized email or password wrong', [], 401);
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request): JsonResponse
     {
         $user = auth()->user();
 
@@ -113,9 +114,9 @@ class UserController extends Controller
 
             $user->save();
 
-            return ApiResponse::success($user, 'Profil berhasil diperbarui');
+            return ApiResponse::success($user, 'Profile berhasil diperbarui');
         } catch (Exception $e) {
-            return ApiResponse::error('Terjadi kesalahan saat memperbarui profil', null);
+            return ApiResponse::error('Terjadi kesalahan saat memperbarui profile', null);
         }
     }
 }
